@@ -10,6 +10,7 @@ module QuickenParser
     def parse
       normalize_line_endings!
       add_xml_decl!
+      add_new_lines!
       close_sgml_decl!
       remove_sgml_options!
 
@@ -107,8 +108,13 @@ module QuickenParser
       @input = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{@input}"
     end
 
+    def add_new_lines!
+       @input.gsub!(/<(\/{0,1}[A-Z.]+[0-9]*)>/, "\n<\\1>")
+       puts "after new lines:\n#{@input}"
+    end
+
     def close_sgml_decl!
-      @input.gsub!(/<([A-Z.]+)>(.+)$/, "<\\1>\\2</\\1>")
+      @input.gsub!(/<([A-Z.]+)>(.+)$/, "<\\1>\\2</\\1>\n")
     end
 
     def remove_sgml_options!
